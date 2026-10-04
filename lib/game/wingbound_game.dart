@@ -753,7 +753,7 @@ class _WingBoundGameState extends State<WingBoundGame>
 
         // Spawn new pipes continuously using exact pipeSpacing
         if (_pipes.isEmpty) {
-          final firstX = gameWidth * 0.72;
+          final firstX = gameWidth * 0.80;
           _spawnPipe(gameHeight, gameWidth, difficulty, customX: firstX);
           _spawnPipe(
             gameHeight,
@@ -1338,11 +1338,11 @@ class _WingBoundGameState extends State<WingBoundGame>
     bool spawnLaser = false;
 
     if (_mode == GameMode.cyberNeon) {
-      if (_score >= 6 && _random.nextDouble() < 0.35) {
-        moveSpeed = 2.2;
-        moveAmp = 20.0;
+      if (_score >= 8 && _random.nextDouble() < 0.28) {
+        moveSpeed = 1.8;
+        moveAmp = 16.0;
       }
-      if (_score >= 4 && _random.nextDouble() < 0.32) {
+      if (_score >= 5 && _random.nextDouble() < 0.26) {
         spawnLaser = true;
       }
     }
@@ -1359,9 +1359,9 @@ class _WingBoundGameState extends State<WingBoundGame>
       ),
     );
 
-    // Spawn Enemy Cyber Drone in the corridor between pipes (~35% chance in Cyber Mode)
-    if (_mode == GameMode.cyberNeon && _score >= 2 && _random.nextDouble() < 0.35) {
-      final droneY = (targetCenter + (_random.nextDouble() - 0.5) * 70.0)
+    // Spawn Enemy Cyber Drone in the corridor between pipes (~28% chance in Cyber Mode)
+    if (_mode == GameMode.cyberNeon && _score >= 3 && _random.nextDouble() < 0.28) {
+      final droneY = (targetCenter + (_random.nextDouble() - 0.5) * 60.0)
           .clamp(minGapCenter, maxGapCenter);
       _drones.add(
         EnemyDrone(

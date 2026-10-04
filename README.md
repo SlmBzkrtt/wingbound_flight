@@ -18,10 +18,10 @@ Each realm transforms the physics engine, camera coordinate system, obstacle geo
 
 | # | Realm | Pilot / Vessel Identity | Core Flight & Physics Mechanics | Hazards & Enemies | Power-Ups & Special Abilities | Hangar Skins (3) |
 | :-: | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | **Classic Sky** (`GameMode.classic`) | 🐦 Sky Aviator | Vertical gravity & impulse wing-flap physics with dynamic **Day → Sunset → Starry Night** sky cycles and progressive 5-tier speed/gap scaling. | Precision emerald & golden pillar corridors with narrowing vertical gaps. | Progressive Level Milestones (`LVL 1` → `LVL 5`) & streak score multipliers. | *Altın Serçe*, *Zümrüt Anka*, *Kızıl Şahin* |
-| **2** | **Cyber Neon** (`GameMode.cyberNeon`) | ⚡ Cyber Valkyrie | **Double-Jump** mid-air thrust, automatic plasma blaster fire, magnetic star-coin attraction (`110px` radius), and **5x Combo Fever** (`2×` score). | Oscillating neon laser gates and incoming **Hunter Cyber Drones**. | **Hex Shield**, **Time-Dilation (Slow-Mo)**, **Heavy Pink Overdrive Blaster**, and **360° EMP Shockwave Blast**. | *Siber Valkür*, *Neon Hayalet*, *Altın Overdrive* |
-| **3** | **Space Orbit** (`GameMode.spaceOrbit`) | 👨‍🚀 Event Horizon Explorer | **360° Polar Orbital Physics** around a supermassive **Black Hole**. Gravity continuously pulls your radius inward toward the Event Horizon (`r < 68px`) while taps fire outward ion thrusters (`r ≤ 242px`). | Radial titanium asteroid walls & crimson plasma pylons along the orbital ring. | **Plasma Shield**, **Gravitational Time Dilation**, **Star Crystals**, **Supernova Pulse**, and **7-Orbit Galactic Cycle (`+5` Bonus)**. | *Ufuk Kaşifi*, *Nebula Kruvazör*, *Solar Nova* |
-| **4** | **1453 Conquest** (`GameMode.conquest1453`) | ⛵ Ottoman Kadırga (Galley) | **Top-Down 3-Lane Naval Blockade Runner** in the Golden Horn (*Haliç*). Steer port/starboard across sea lanes while automatically firing dual bow cannonballs (`SPACE / TAP` switches lane & fires). | Byzantine stone sea walls, **Interlocking Iron Harbor Chains** (breakable by cannon fire), and **Greek Fire (*Rum Ateşi*) Ships**. | **Oak Hull Armor**, **Fetih Rüzgarı (Slow-Mo)**, **Akçe Treasure Chests**, and **360° Şahi Topu Broadside Salvo**. | *Fatih Kadırgası*, *Altın Sancak*, *Karadeniz Kurdu* |
+| **1** | **Classic Sky** (`GameMode.classic`) | 🐦 Sky Aviator | Vertical gravity & impulse wing-flap physics with continuous multi-pipe flow (`250 → 215px` spacing) and progressive 4-tier speed/gap scaling (`142 → 172px/s`). | Precision 3D emerald & golden pillar corridors with narrowing vertical gaps (`196 → 162px`). | Progressive Level Milestones (`LVL 1` → `LVL 4`) & streak score multipliers. | *Altın Serçe*, *Zümrüt Anka*, *Kızıl Şahin* |
+| **2** | **Cyber Neon** (`GameMode.cyberNeon`) | ⚡ Cyber Valkyrie | **Double-Jump** mid-air thrust, automatic plasma blaster fire, magnetic star-coin attraction (`110px` radius), and **Combo Fever** (`up to 4×` score). | Oscillating neon laser gates and incoming **Hunter Cyber Drones**. | **Hex Shield**, **Time-Dilation (Slow-Mo)**, **Heavy Pink Overdrive Blaster**, and **360° EMP Shockwave Blast**. | *Siber Valkür*, *Neon Hayalet*, *Altın Overdrive* |
+| **3** | **Space Orbit** (`GameMode.spaceOrbit`) | 👨‍🚀 Event Horizon Explorer | **360° Polar Orbital Physics** around a supermassive **Black Hole**. Gravity continuously pulls your radius inward toward the Event Horizon (`r < 82px`) while taps fire outward ion thrusters (`r ≤ 242px`). | Radial titanium asteroid walls & crimson plasma pylons spaced continuously along the orbital ring (`~3 gates/orbit`). | **Plasma Shield**, **Gravitational Time Dilation**, **Star Crystals**, **Supernova Pulse**, and **7-Orbit Galactic Cycle (`+5` Bonus)**. | *Ufuk Kaşifi*, *Nebula Kruvazör*, *Solar Nova* |
+| **4** | **1453 Conquest** (`GameMode.conquest1453`) | ⛵ Ottoman Kadırga (Galley) | **Top-Down Naval Blockade Runner** in the Golden Horn (*Haliç*). Steer port/starboard (*İskele / Sancak*) across sea lanes while automatically firing dual bow cannonballs (`SPACE / TAP` tacks & fires). | Byzantine stone sea walls, **Interlocking Iron Harbor Chains** (breakable by cannon fire), and **Greek Fire (*Rum Ateşi*) Ships**. | **Yağlı Kızak Hull Armor**, **Şahi Barutu (3× Heavy Cannon Volley)**, **Fetih Sancağı**, and **360° Şahi Topu Broadside Salvo**. | *Fatih Kadırgası*, *Altın Sancak*, *Karadeniz Kurdu* |
 
 ---
 
@@ -29,18 +29,18 @@ Each realm transforms the physics engine, camera coordinate system, obstacle geo
 
 - **100% Procedural Vector Graphics & GLSL Shaders (`shaders/realm_fx.frag`)**
   - Zero external PNG/JPEG sprite dependencies—every bird, cyber drone, black hole accretion disk, astronaut suit, and 6-oar Ottoman galley is rendered mathematically on the GPU canvas.
-  - Real-time **Impeller GLSL Fragment Shader (`RealmShaderOverlayPainter`)** applies custom per-pixel post-processing for each realm:
+  - Real-time **Impeller GLSL Fragment Shader (`RealmShaderOverlayPainter`)** with premultiplied-alpha blending applies custom per-pixel post-processing for each realm:
     - *Classic Sky:* Warm golden sunbeams & soft atmospheric vignette.
-    - *Cyber Neon:* Moving CRT hologram scanlines & synthwave chromatic edge pulse.
+    - *Cyber Neon:* Subtle CRT hologram scanlines & synthwave chromatic edge pulse.
     - *Space Orbit:* Gravitational lensing rings & cosmic event-horizon distortion.
-    - *1453 Conquest:* Flickering torchlight ember shimmer over the Golden Horn waters.
+    - *1453 Conquest:* Flickering torchlight shore glow over the Golden Horn waters.
 
 - **12-Skin Character & Fleet Hangar (`lib/game/models/skin_model.dart`)**
   - Each realm includes **3 selectable skins/hulls** (`4 realms × 3 skins = 12 unique designs`) directly accessible via interactive hangar chips on the Mode Select cards.
   - Selected skins persist automatically via `SharedPreferences` and dynamically re-color character bodies, cyber plasma trails, astronaut telemetry cores, and Ottoman galley sails.
 
-- **Polyphonic 16-Bit 44.1kHz PCM WAV Audio Synthesizer (`GameAudioService`)**
-  - Synthesizes crisp pitch-swept jump thrusters, 4-note major triad score arpeggios (`C5–E5–G5–C6`), sub-bass EMP/Şahi shockwaves, and collision impacts directly in memory at startup.
+- **Realm-Specific Polyphonic 16-Bit 44.1kHz PCM WAV Audio Synthesizer (`GameAudioService`)**
+  - Synthesizes **7 distinct procedural WAV buffers** directly in memory at startup—including realm-tailored action sounds (*Classic* airy wing whoosh, *Cyber* dual-oscillator laser pulse, *Space* deep ion thruster, *1453 Conquest* wooden oar water splash + cannon thud), 4-note major triad score arpeggios (`C5–E5–G5–C6`), sub-bass EMP/Şahi shockwaves, and collision impacts.
   - Preloads generated WAV buffers into a native 4-channel polyphonic `AVAudioPlayer` pool (`MainFlutterWindow.swift`) coupled with `HapticFeedback` tactile responses.
 
 ---
@@ -49,10 +49,10 @@ Each realm transforms the physics engine, camera coordinate system, obstacle geo
 
 ```text
 lib/
-├── main.dart                                      # Portrait lock, Edge-to-Edge UI, font & storage pre-warming
+├── main.dart                                      # Portrait lock, Edge-to-Edge UI, storage & audio pre-warming
 └── game/
     ├── wingbound_game.dart                        # 60–120 FPS Ticker loop, 9:16 viewport & ValueNotifier canvas host
-    ├── game_constants.dart                        # Logical resolution constants (440x782 / 540x960) & difficulty curves
+    ├── game_constants.dart                        # Logical resolution constants (430x764 / 560x995) & 4-tier difficulty curves
     ├── models/
     │   ├── game_mode.dart                         # GameMode enum (classic, cyberNeon, spaceOrbit, conquest1453)
     │   ├── skin_model.dart                        # RealmSkin & RealmSkinCatalog (12 customizable skins across 4 realms)
@@ -60,19 +60,19 @@ lib/
     │   ├── pipe.dart                              # Dynamic moving/destructible obstacle model
     │   ├── power_up.dart                          # Cyber power-ups, LaserBolt projectiles & EnemyDrone models
     │   ├── space_models.dart                      # 360° Polar SpaceExplorer, OrbitGate & CosmicPowerUp models
-    │   ├── conquest_models.dart                   # 3-Lane OttomanGalley, SeaBarrier, Cannonball & EnemyFireShip models
+    │   ├── conquest_models.dart                   # Top-Down OttomanGalley, SeaBarrier, Cannonball & EnemyFireShip models
     │   └── particle.dart                          # Pre-allocated object-pooled ParticleSystem (max 140 particles)
     ├── painters/
-    │   ├── background_painter.dart                # Classic Sky day/sunset/night parallax CustomPainter
+    │   ├── background_painter.dart                # Zero-repaint static Classic Sky multi-layered scenic CustomPainter
     │   ├── bird_painter.dart                      # Static-Path & cached-Paint Classic Aviator CustomPainter
-    │   ├── pipe_painter.dart                      # Classic bevelled pillar CustomPainter
-    │   ├── ground_painter.dart                    # Scrolling grass & soil parallax CustomPainter
-    │   ├── cyber_painters.dart                    # Synthwave grid, CyberBirdPainter, laser gates & ParticlePainter
+    │   ├── pipe_painter.dart                      # 3D bevelled metallic/emerald pillar CustomPainter
+    │   ├── ground_painter.dart                    # Zero-repaint static grass & soil CustomPainter
+    │   ├── cyber_painters.dart                    # Static Synthwave skyline & grid, CyberBirdPainter, laser gates & ParticlePainter
     │   ├── space_painters.dart                    # Black Hole accretion disk, polar gates & astronaut CustomPainter
     │   ├── conquest_painters.dart                 # Golden Horn water, Byzantine chain locks & Ottoman Kadırga painter
     │   └── shader_fx_painter.dart                 # Impeller GLSL FragmentProgram loader & RealmShaderOverlayPainter
     ├── services/
-    │   └── game_services.dart                     # Cached SharedPreferences storage & 16-bit PCM WAV audio synthesizer
+    │   └── game_services.dart                     # Cached SharedPreferences storage & 7-sound PCM WAV audio synthesizer
     └── widgets/
         ├── mode_select_screen.dart                # Responsive mode selector with integrated 12-skin Fleet Hangar
         ├── ready_overlay.dart                     # Realm-specific pre-flight briefing & control guide overlay
@@ -84,13 +84,14 @@ shaders/
 
 ### Key Technical Highlights
 1. **Zero-Widget-Rebuild 60–120 FPS Render Loop:**
-   - `_repaintTick` (`ValueNotifier<int>`) is passed directly to `CustomPainter(repaint: _repaintTick)` inside an isolated `RepaintBoundary`.
-   - Frame updates (`_onTick`) never call `setState()` during active gameplay unless a discrete HUD state changes (e.g., integer score increment, shield toggle, or game-over transition), keeping widget tree rebuild cost near zero.
+   - `_repaintTick` (`ValueNotifier<int>`) is passed only to active dynamic `CustomPainter(repaint: _repaintTick)` layers inside an isolated `RepaintBoundary`.
+   - Static scenic layers (`BackgroundPainter`, `GroundPainter`, `CyberBackgroundPainter`, `CyberGroundPainter`) return `shouldRepaint => false` (`const`), eliminating background/ground redraw overhead while keeping visual focus 100% on the continuous obstacle stream.
+   - Frame updates (`_onTick`) never call `setState()` during active gameplay unless a discrete HUD state changes (e.g., integer score increment, shield toggle, or game-over transition).
 2. **Static Reusable `Paint` & `Path` Caching + Object-Pooled Particles:**
    - Painters cache `Paint` and `Path` instances at the class level (`static final Paint`), eliminating per-frame heap allocations and Garbage Collection (GC) frame drops on mobile devices.
    - `ParticleSystem` uses a fixed-capacity pool (`maxParticles = 140`) with swap-and-pop removal (`O(1)`) instead of allocating new lists every frame.
 3. **Strict 9:16 Responsive Viewport (`SafeArea` + `AspectRatio` + `FittedBox`):**
-   - The game canvas operates in a deterministic logical coordinate space (`440×782` standard / `540×960` wide arena) wrapped in `SafeArea` → `AspectRatio(aspectRatio: 9 / 16)` → `FittedBox(fit: BoxFit.contain)`. Resizing desktop windows or playing on tablets/foldables never skews physics speeds or collision hitboxes.
+   - The game canvas operates in a deterministic 9:16 logical coordinate space (`430×764` standard / `560×995` wide arena) wrapped in `SafeArea` → `AspectRatio(aspectRatio: 9 / 16)` → `FittedBox(fit: BoxFit.contain)`. Resizing desktop windows or playing on tablets/foldables never skews physics speeds or collision hitboxes.
 4. **Lifecycle-Aware Resource Management:**
    - Implements `WidgetsBindingObserver` (`didChangeAppLifecycleState`) to automatically mute the `Ticker` and pause audio whenever the app transitions to `paused`, `inactive`, `hidden`, or `detached`, ensuring `0%` background CPU/GPU drain.
 
@@ -103,8 +104,8 @@ shaders/
 - **Version:** `1.0.0+1`
 - **Orientation:** Portrait (`DeviceOrientation.portraitUp`, `DeviceOrientation.portraitDown`)
 - **Supported Targets:**
-  - **Android:** API 21+ (`minSdk = maxOf(flutter.minSdkVersion, 21)`), R8 code shrinking (`isMinifyEnabled = true`, `isShrinkResources = true`) & ProGuard rules configured (`android/app/proguard-rules.pro`).
-  - **iOS:** iOS 12.0+, `CADisableMinimumFrameDurationOnPhone` enabled for 120Hz ProMotion displays, Portrait-locked orientation.
+  - **Android:** API 21+ (`minSdk = maxOf(flutter.minSdkVersion, 21)`), Java/Kotlin JVM 17, automatic `key.properties` upload keystore signing (`android/key.properties.example`) with debug fallback, R8 code shrinking (`isMinifyEnabled = true`, `isShrinkResources = true`) & ProGuard rules (`android/app/proguard-rules.pro`).
+  - **iOS:** iOS 12.0+, `CADisableMinimumFrameDurationOnPhone` enabled for 120Hz ProMotion displays, Portrait-locked orientation, `ITSAppUsesNonExemptEncryption = false` export compliance & `public.app-category.arcade-games` metadata.
   - **macOS:** Native Metal/Impeller desktop build (`WingBound.app`) with full keyboard (`SPACE`, `W`, `A/D`, `LEFT/RIGHT`, `E/X/SHIFT`, `ESC/M`) & mouse/trackpad controls, plus native 4-channel `AVAudioPlayer` sound engine.
 
 ---

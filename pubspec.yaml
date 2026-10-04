@@ -1,0 +1,46 @@
+name: wingbound_flight
+description: An arcade flight game featuring 4 unique realms and flight mechanics built with Flutter.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  google_fonts: ^9.0.0
+  shared_preferences: ^2.5.5
+  audioplayers: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
+
+# App Store & Google Play Icon Configuration
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  macos:
+    generate: true
+  image_path: "web/icons/Icon-512.png"
+  adaptive_icon_background: "#100C22"
+  adaptive_icon_foreground: "web/icons/Icon-512.png"
+
+# Native Splash Screen Configuration
+flutter_native_splash:
+  color: "#100C22"
+  image: "web/icons/Icon-512.png"
+  android_12:
+    color: "#100C22"
+    image: "web/icons/Icon-512.png"
+  fullscreen: true
+
+flutter:
+  uses-material-design: true

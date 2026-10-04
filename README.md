@@ -1,57 +1,156 @@
 # WingBound: Multi Realms (v1.0.0)
 
-**WingBound: Multi Realms** is a modern, high-performance arcade flight game built with Flutter (`CustomPainter` & 60/120 FPS `Ticker` engine). Designed with zero external image dependencies, every realm, character, particle effect, and obstacle is procedurally rendered on the GPU canvas.
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.13+-0175C2?logo=dart)](https://dart.dev)
+[![Version](https://img.shields.io/badge/Release-v1.0.0-00E5FF)](https://github.com/SlmBzkrtt/wingbound_flight/releases/tag/v1.0.0)
+[![Bundle ID](https://img.shields.io/badge/Bundle%20ID-com.selimbozkurt.wingbound__flight-7C4DFF)](#platform-support--store-readiness)
+[![Platforms](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7C%20macOS-FF8C42)](#platform-support--store-readiness)
+
+**WingBound: Multi Realms** is a high-performance, **60–120 FPS 4-in-1 arcade flight & naval action experience** built entirely with **Flutter**, a custom zero-allocation `CustomPainter` vector engine, **Impeller GLSL Fragment Shaders**, and **procedural 16-bit PCM WAV audio synthesis**.
+
+> *"Four distinct dimensions. Four completely different laws of motion—from classic gravity flight and synthwave cyber-combat to 360° black hole orbital mechanics and the 1453 Golden Horn naval blockade."*
 
 ---
 
-## 🎮 4 Unique Realms & Flight Mechanics
+## 🌌 The 4 Realms & Flight Mechanics
 
-1. **Classic Sky (`GameMode.classic`)**
-   - Dynamic day, sunset, and starry night sky transitions.
-   - Smooth physics-based wing flapping and progressive pipe gap scaling.
+Each realm transforms the physics engine, camera coordinate system, obstacle geometry, GLSL shader atmosphere, particle effects, and player controls:
 
-2. **Cyber Neon (`GameMode.cyberNeon`)**
-   - Synthwave neon grid, moving laser barriers, and hunter drones.
-   - Double-jump mechanics, plasma blaster power-ups, magnetic star crystals, time-dilation (Slow-Mo), and EMP shockwave blasts.
-
-3. **Space Orbit (`GameMode.spaceOrbit`)**
-   - 360° counter-clockwise orbital flight around a supermassive Black Hole & Event Horizon.
-   - Radial asteroid/plasma gates, gravitational pull physics, and 7-orbit Galactic Cycle milestones.
-
-4. **1453 Conquest (`GameMode.conquest1453`)**
-   - Top-down naval blockade runner set in the Golden Horn (Haliç).
-   - Steer the Ottoman Kadırga across 3 sea lanes, dodge Byzantine harbor chains and Greek fire ships, and fire broadside Şahi cannons.
+| # | Realm | Pilot / Vessel Identity | Core Flight & Physics Mechanics | Hazards & Enemies | Power-Ups & Special Abilities | Hangar Skins (3) |
+| :-: | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | **Classic Sky** (`GameMode.classic`) | 🐦 Sky Aviator | Vertical gravity & impulse wing-flap physics with dynamic **Day → Sunset → Starry Night** sky cycles and progressive 5-tier speed/gap scaling. | Precision emerald & golden pillar corridors with narrowing vertical gaps. | Progressive Level Milestones (`LVL 1` → `LVL 5`) & streak score multipliers. | *Altın Serçe*, *Zümrüt Anka*, *Kızıl Şahin* |
+| **2** | **Cyber Neon** (`GameMode.cyberNeon`) | ⚡ Cyber Valkyrie | **Double-Jump** mid-air thrust, automatic plasma blaster fire, magnetic star-coin attraction (`110px` radius), and **5x Combo Fever** (`2×` score). | Oscillating neon laser gates and incoming **Hunter Cyber Drones**. | **Hex Shield**, **Time-Dilation (Slow-Mo)**, **Heavy Pink Overdrive Blaster**, and **360° EMP Shockwave Blast**. | *Siber Valkür*, *Neon Hayalet*, *Altın Overdrive* |
+| **3** | **Space Orbit** (`GameMode.spaceOrbit`) | 👨‍🚀 Event Horizon Explorer | **360° Polar Orbital Physics** around a supermassive **Black Hole**. Gravity continuously pulls your radius inward toward the Event Horizon (`r < 68px`) while taps fire outward ion thrusters (`r ≤ 242px`). | Radial titanium asteroid walls & crimson plasma pylons along the orbital ring. | **Plasma Shield**, **Gravitational Time Dilation**, **Star Crystals**, **Supernova Pulse**, and **7-Orbit Galactic Cycle (`+5` Bonus)**. | *Ufuk Kaşifi*, *Nebula Kruvazör*, *Solar Nova* |
+| **4** | **1453 Conquest** (`GameMode.conquest1453`) | ⛵ Ottoman Kadırga (Galley) | **Top-Down 3-Lane Naval Blockade Runner** in the Golden Horn (*Haliç*). Steer port/starboard across sea lanes while automatically firing dual bow cannonballs (`SPACE / TAP` switches lane & fires). | Byzantine stone sea walls, **Interlocking Iron Harbor Chains** (breakable by cannon fire), and **Greek Fire (*Rum Ateşi*) Ships**. | **Oak Hull Armor**, **Fetih Rüzgarı (Slow-Mo)**, **Akçe Treasure Chests**, and **360° Şahi Topu Broadside Salvo**. | *Fatih Kadırgası*, *Altın Sancak*, *Karadeniz Kurdu* |
 
 ---
 
-## ⚡ Architecture & Performance Highlights
+## 🎨 Key Highlights
 
-- **Zero-Allocation Render Loop:** All `CustomPainter` implementations (`BackgroundPainter`, `BirdPainter`, `PipePainter`, `GroundPainter`, `CyberPainters`, `SpaceOrbitWorldPainter`, `ConquestWorldPainter`, `ParticlePainter`) reuse static `Paint` objects and trigger via a dedicated `ValueNotifier<int>` (`repaint`) without rebuilding the Flutter widget tree.
-- **Responsive 9:16 Viewport:** Wrapped in `SafeArea` + `AspectRatio(9 / 16)` + `FittedBox(BoxFit.contain)` to guarantee identical physics and hitboxes across phones, tablets, foldables, and desktop windows.
-- **Offline-Ready Typography & Storage:** Pre-cached pixel typography (`PressStart2P`) with graceful offline fallback, plus persistent high scores and audio/haptic preferences via `SharedPreferences`.
-- **Lifecycle Safe:** Automatically pauses the game loop (`Ticker`) when backgrounded or minimized (`AppLifecycleState`).
+- **100% Procedural Vector Graphics & GLSL Shaders (`shaders/realm_fx.frag`)**
+  - Zero external PNG/JPEG sprite dependencies—every bird, cyber drone, black hole accretion disk, astronaut suit, and 6-oar Ottoman galley is rendered mathematically on the GPU canvas.
+  - Real-time **Impeller GLSL Fragment Shader (`RealmShaderOverlayPainter`)** applies custom per-pixel post-processing for each realm:
+    - *Classic Sky:* Warm golden sunbeams & soft atmospheric vignette.
+    - *Cyber Neon:* Moving CRT hologram scanlines & synthwave chromatic edge pulse.
+    - *Space Orbit:* Gravitational lensing rings & cosmic event-horizon distortion.
+    - *1453 Conquest:* Flickering torchlight ember shimmer over the Golden Horn waters.
+
+- **12-Skin Character & Fleet Hangar (`lib/game/models/skin_model.dart`)**
+  - Each realm includes **3 selectable skins/hulls** (`4 realms × 3 skins = 12 unique designs`) directly accessible via interactive hangar chips on the Mode Select cards.
+  - Selected skins persist automatically via `SharedPreferences` and dynamically re-color character bodies, cyber plasma trails, astronaut telemetry cores, and Ottoman galley sails.
+
+- **Polyphonic 16-Bit 44.1kHz PCM WAV Audio Synthesizer (`GameAudioService`)**
+  - Synthesizes crisp pitch-swept jump thrusters, 4-note major triad score arpeggios (`C5–E5–G5–C6`), sub-bass EMP/Şahi shockwaves, and collision impacts directly in memory at startup.
+  - Preloads generated WAV buffers into a native 4-channel polyphonic `AVAudioPlayer` pool (`MainFlutterWindow.swift`) coupled with `HapticFeedback` tactile responses.
+
+---
+
+## 🏗️ Architecture & Performance Engineering
+
+```text
+lib/
+├── main.dart                                      # Portrait lock, Edge-to-Edge UI, font & storage pre-warming
+└── game/
+    ├── wingbound_game.dart                        # 60–120 FPS Ticker loop, 9:16 viewport & ValueNotifier canvas host
+    ├── game_constants.dart                        # Logical resolution constants (440x782 / 540x960) & difficulty curves
+    ├── models/
+    │   ├── game_mode.dart                         # GameMode enum (classic, cyberNeon, spaceOrbit, conquest1453)
+    │   ├── skin_model.dart                        # RealmSkin & RealmSkinCatalog (12 customizable skins across 4 realms)
+    │   ├── bird.dart                              # Classic & Cyber vertical physics model & hitbox calculation
+    │   ├── pipe.dart                              # Dynamic moving/destructible obstacle model
+    │   ├── power_up.dart                          # Cyber power-ups, LaserBolt projectiles & EnemyDrone models
+    │   ├── space_models.dart                      # 360° Polar SpaceExplorer, OrbitGate & CosmicPowerUp models
+    │   ├── conquest_models.dart                   # 3-Lane OttomanGalley, SeaBarrier, Cannonball & EnemyFireShip models
+    │   └── particle.dart                          # Pre-allocated object-pooled ParticleSystem (max 140 particles)
+    ├── painters/
+    │   ├── background_painter.dart                # Classic Sky day/sunset/night parallax CustomPainter
+    │   ├── bird_painter.dart                      # Static-Path & cached-Paint Classic Aviator CustomPainter
+    │   ├── pipe_painter.dart                      # Classic bevelled pillar CustomPainter
+    │   ├── ground_painter.dart                    # Scrolling grass & soil parallax CustomPainter
+    │   ├── cyber_painters.dart                    # Synthwave grid, CyberBirdPainter, laser gates & ParticlePainter
+    │   ├── space_painters.dart                    # Black Hole accretion disk, polar gates & astronaut CustomPainter
+    │   ├── conquest_painters.dart                 # Golden Horn water, Byzantine chain locks & Ottoman Kadırga painter
+    │   └── shader_fx_painter.dart                 # Impeller GLSL FragmentProgram loader & RealmShaderOverlayPainter
+    ├── services/
+    │   └── game_services.dart                     # Cached SharedPreferences storage & 16-bit PCM WAV audio synthesizer
+    └── widgets/
+        ├── mode_select_screen.dart                # Responsive mode selector with integrated 12-skin Fleet Hangar
+        ├── ready_overlay.dart                     # Realm-specific pre-flight briefing & control guide overlay
+        ├── scoreboard.dart                        # Zero-rebuild live score & realm badge HUD
+        └── game_over_dialog.dart                  # Medal evaluation, high-score celebration & instant retry dialog
+shaders/
+└── realm_fx.frag                                  # Custom GLSL 460 core fragment shader for all 4 realms
+```
+
+### Key Technical Highlights
+1. **Zero-Widget-Rebuild 60–120 FPS Render Loop:**
+   - `_repaintTick` (`ValueNotifier<int>`) is passed directly to `CustomPainter(repaint: _repaintTick)` inside an isolated `RepaintBoundary`.
+   - Frame updates (`_onTick`) never call `setState()` during active gameplay unless a discrete HUD state changes (e.g., integer score increment, shield toggle, or game-over transition), keeping widget tree rebuild cost near zero.
+2. **Static Reusable `Paint` & `Path` Caching + Object-Pooled Particles:**
+   - Painters cache `Paint` and `Path` instances at the class level (`static final Paint`), eliminating per-frame heap allocations and Garbage Collection (GC) frame drops on mobile devices.
+   - `ParticleSystem` uses a fixed-capacity pool (`maxParticles = 140`) with swap-and-pop removal (`O(1)`) instead of allocating new lists every frame.
+3. **Strict 9:16 Responsive Viewport (`SafeArea` + `AspectRatio` + `FittedBox`):**
+   - The game canvas operates in a deterministic logical coordinate space (`440×782` standard / `540×960` wide arena) wrapped in `SafeArea` → `AspectRatio(aspectRatio: 9 / 16)` → `FittedBox(fit: BoxFit.contain)`. Resizing desktop windows or playing on tablets/foldables never skews physics speeds or collision hitboxes.
+4. **Lifecycle-Aware Resource Management:**
+   - Implements `WidgetsBindingObserver` (`didChangeAppLifecycleState`) to automatically mute the `Ticker` and pause audio whenever the app transitions to `paused`, `inactive`, `hidden`, or `detached`, ensuring `0%` background CPU/GPU drain.
+
+---
+
+## 📱 Platform Support & Store Readiness
+
+- **App Name:** `WingBound: Multi Realms`
+- **Package / Bundle ID:** `com.selimbozkurt.wingbound_flight` (Android) / `com.selimbozkurt.wingboundflight` (iOS & macOS UTI)
+- **Version:** `1.0.0+1`
+- **Orientation:** Portrait (`DeviceOrientation.portraitUp`, `DeviceOrientation.portraitDown`)
+- **Supported Targets:**
+  - **Android:** API 21+ (`minSdk = maxOf(flutter.minSdkVersion, 21)`), R8 code shrinking (`isMinifyEnabled = true`, `isShrinkResources = true`) & ProGuard rules configured (`android/app/proguard-rules.pro`).
+  - **iOS:** iOS 12.0+, `CADisableMinimumFrameDurationOnPhone` enabled for 120Hz ProMotion displays, Portrait-locked orientation.
+  - **macOS:** Native Metal/Impeller desktop build (`WingBound.app`) with full keyboard (`SPACE`, `W`, `A/D`, `LEFT/RIGHT`, `E/X/SHIFT`, `ESC/M`) & mouse/trackpad controls, plus native 4-channel `AVAudioPlayer` sound engine.
 
 ---
 
 ## 🚀 Getting Started
 
-```bash
-# Clean and fetch dependencies
-flutter clean
-flutter pub get
+### Prerequisites
+- Flutter SDK `^3.13.3` (or latest stable Flutter 3.x)
+- Xcode (for iOS / macOS builds) or Android Studio (for Android builds)
 
-# Run static analysis and unit tests
+### Installation & Run
+```bash
+# 1. Clean and fetch dependencies
+flutter clean && flutter pub get
+
+# 2. Run static analysis & unit/widget test suite (16/16 tests)
 flutter analyze
 flutter test
 
-# Launch on your target platform
-flutter run
+# 3. Launch on your target device
+flutter run -d macos     # macOS Desktop
+flutter run -d ios       # iOS Simulator / Device
+flutter run -d android   # Android Emulator / Device
+```
+
+### Generating Store Icons & Native Splash (Optional)
+Configuration templates for `flutter_launcher_icons` and `flutter_native_splash` are pre-configured in `pubspec.yaml`:
+```bash
+dart run flutter_launcher_icons
+dart run flutter_native_splash:create
+```
+
+### Production Store Builds
+```bash
+# Android App Bundle (Google Play)
+flutter build appbundle --release
+
+# iOS Archive (App Store Connect)
+flutter build ipa --release
+
+# macOS Release Bundle
+flutter build macos --release
 ```
 
 ---
 
-## 📦 Store Release Identity
+## 📄 License
 
-- **Package / Bundle ID:** `com.selimbozkurt.wingbound_flight`
-- **App Title:** `WingBound: Multi Realms`
-- **Version:** `1.0.0+1`
+Copyright © 2026 Selim Bozkurt (`com.selimbozkurt.wingbound_flight`). All rights reserved.

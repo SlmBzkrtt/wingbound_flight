@@ -1,0 +1,7 @@
+# Google Play Store Upload Keystore Şablonu
+# Bu dosyayı "android/key.properties" olarak kopyalayıp kendi keystore bilgilerinizle doldurun.
+# (key.properties dosyası güvenlik için .gitignore içerisindedir, Git'e gönderilmez.)
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=upload-keystore.jks

@@ -122,8 +122,8 @@ void main() {
       final diff = GameConstants.getDifficulty(0);
       expect(diff.level, equals(1));
       expect(diff.pipeGap, greaterThanOrEqualTo(185.0)); // Wide gap
-      expect(diff.pipeSpacing, greaterThanOrEqualTo(350.0)); // Ample breathing room
-      expect(diff.pipeSpeed, lessThanOrEqualTo(130.0)); // Calm pace
+      expect(diff.pipeSpacing, greaterThanOrEqualTo(200.0)); // Continuous 2-pipe-on-screen spacing
+      expect(diff.pipeSpeed, lessThanOrEqualTo(165.0)); // Smooth arcade pace
     });
 
     test('Difficulty scales smoothly and caps at safe values', () {
@@ -142,8 +142,8 @@ void main() {
       expect(l3.pipeSpeed, greaterThan(l2.pipeSpeed));
       expect(l4.pipeSpeed, greaterThan(l3.pipeSpeed));
 
-      // Spacing decreases gradually but stays fair (never below 270)
-      expect(l4.pipeSpacing, greaterThanOrEqualTo(270.0));
+      // Spacing decreases gradually but stays fair (never below 170)
+      expect(l4.pipeSpacing, greaterThanOrEqualTo(170.0));
 
       // Gap stays comfortable (never below 150)
       expect(l4.pipeGap, greaterThanOrEqualTo(150.0));

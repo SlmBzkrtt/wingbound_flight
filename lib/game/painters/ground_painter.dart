@@ -13,7 +13,7 @@ class GroundPainter extends CustomPainter {
     ..strokeWidth = 2.5;
 
   const GroundPainter({
-    required this.groundOffset,
+    this.groundOffset = 0.0,
     super.repaint,
   });
 
@@ -47,15 +47,14 @@ class GroundPainter extends CustomPainter {
     );
     canvas.drawRect(grassRect, _grassBgPaint);
 
-    // 3. Diyagonal çim desenleri (Tek bir birleşik Path ile tek drawPath çağrısı)
+    // 3. Diyagonal çim desenleri (Sabit konum, tek drawPath çağrısı)
     const stripeWidth = 14.0;
-    final normalizedOffset = groundOffset % (stripeWidth * 2);
 
     canvas.save();
     canvas.clipRect(grassRect);
 
     final stripesPath = Path();
-    for (double x = -stripeWidth * 2 - normalizedOffset;
+    for (double x = -stripeWidth * 2;
         x < totalWidth + stripeWidth * 2;
         x += stripeWidth * 2) {
       stripesPath
@@ -78,7 +77,5 @@ class GroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant GroundPainter oldDelegate) {
-    return (oldDelegate.groundOffset - groundOffset).abs() > 0.05;
-  }
+  bool shouldRepaint(covariant GroundPainter oldDelegate) => false;
 }

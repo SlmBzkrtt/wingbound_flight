@@ -214,7 +214,7 @@ class CyberBackgroundPainter extends CustomPainter {
 class CyberGroundPainter extends CustomPainter {
   final double groundOffset;
 
-  const CyberGroundPainter({required this.groundOffset, super.repaint});
+  const CyberGroundPainter({this.groundOffset = 0.0, super.repaint});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -238,15 +238,14 @@ class CyberGroundPainter extends CustomPainter {
       ..strokeWidth = 1.5;
     canvas.drawLine(Offset(0, groundY), Offset(totalWidth, groundY), linePaint);
 
-    // Moving Cyber Wireframe Grid Lines
+    // Static Cyber Wireframe Grid Lines
     final gridLinePaint = Paint()
       ..color = const Color(0xFFFF007F).withValues(alpha: 0.6)
       ..strokeWidth = 2.0;
 
     const spacing = 36.0;
-    final normalizedOffset = groundOffset % spacing;
 
-    for (double x = -spacing - normalizedOffset; x < totalWidth + spacing; x += spacing) {
+    for (double x = -spacing; x < totalWidth + spacing; x += spacing) {
       canvas.drawLine(
         Offset(x, groundY),
         Offset(x - 20, size.height),
@@ -264,9 +263,7 @@ class CyberGroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CyberGroundPainter oldDelegate) {
-    return oldDelegate.groundOffset != groundOffset;
-  }
+  bool shouldRepaint(covariant CyberGroundPainter oldDelegate) => false;
 }
 
 // 3. Cyber Mecha Bird with Tron Tail Trail, Visor, Shield, Projectiles & Drones

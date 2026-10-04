@@ -30,10 +30,10 @@ class SpaceOrbitDifficulty {
       return const SpaceOrbitDifficulty(
         stage: 1,
         stageTitle: 'DIŞ YÖRÜNGE (KOLAY)',
-        angularSpeed: 0.70,
+        angularSpeed: 0.78,
         gapSize: 88.0,
-        gateSpacingAngle: math.pi * 0.90, // 162° apart
-        maxGapDelta: 50.0,
+        gateSpacingAngle: math.pi * 0.65, // ~117° apart (~3 gates per orbit)
+        maxGapDelta: 46.0,
       );
     } else if (score < 16) {
       // Stage 2: Accretion gravitational pull
@@ -41,10 +41,10 @@ class SpaceOrbitDifficulty {
       return SpaceOrbitDifficulty(
         stage: 2,
         stageTitle: 'ÇEKİM ALANI',
-        angularSpeed: 0.72 + progress * 0.12, // 0.72 -> 0.84
+        angularSpeed: 0.80 + progress * 0.12, // 0.80 -> 0.92
         gapSize: 86.0 - progress * 8.0, // 86 -> 78
-        gateSpacingAngle: math.pi * (0.88 - progress * 0.10),
-        maxGapDelta: 58.0,
+        gateSpacingAngle: math.pi * (0.64 - progress * 0.06),
+        maxGapDelta: 52.0,
       );
     } else if (score < 32) {
       // Stage 3: Event Horizon Edge
@@ -52,10 +52,10 @@ class SpaceOrbitDifficulty {
       return SpaceOrbitDifficulty(
         stage: 3,
         stageTitle: 'OLAY UFKU SINIRI',
-        angularSpeed: 0.84 + progress * 0.12, // 0.84 -> 0.96
+        angularSpeed: 0.92 + progress * 0.12, // 0.92 -> 1.04
         gapSize: 78.0 - progress * 8.0, // 78 -> 70
-        gateSpacingAngle: math.pi * (0.78 - progress * 0.08),
-        maxGapDelta: 65.0,
+        gateSpacingAngle: math.pi * (0.58 - progress * 0.05),
+        maxGapDelta: 58.0,
       );
     } else {
       // Stage 4: Singularity Vortex
@@ -63,10 +63,10 @@ class SpaceOrbitDifficulty {
       return SpaceOrbitDifficulty(
         stage: 4,
         stageTitle: 'TEKİLLİK GİRDABI',
-        angularSpeed: 0.96 + extra * 0.10, // Caps at 1.06 rad/s
+        angularSpeed: 1.04 + extra * 0.10, // Caps at 1.14 rad/s
         gapSize: 70.0 - extra * 4.0, // Never smaller than 66px
-        gateSpacingAngle: math.pi * 0.68, // ~122° apart
-        maxGapDelta: 72.0,
+        gateSpacingAngle: math.pi * 0.52, // ~94° apart
+        maxGapDelta: 64.0,
       );
     }
   }

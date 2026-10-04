@@ -42,37 +42,37 @@ class GameConstants {
   static const DifficultyConfig _tier1 = DifficultyConfig(
     level: 1,
     levelTitle: 'BAŞLANGIÇ',
-    pipeSpeed: 125.0,
-    pipeGap: 190.0,
-    pipeSpacing: 360.0,
-    maxGapDelta: 120.0,
+    pipeSpeed: 160.0,
+    pipeGap: 186.0,
+    pipeSpacing: 210.0,
+    maxGapDelta: 95.0,
   );
 
   static const DifficultyConfig _tier2 = DifficultyConfig(
     level: 2,
     levelTitle: 'SEVİYE 2 ⚡',
-    pipeSpeed: 138.0,
-    pipeGap: 175.0,
-    pipeSpacing: 330.0,
-    maxGapDelta: 145.0,
+    pipeSpeed: 172.0,
+    pipeGap: 174.0,
+    pipeSpacing: 198.0,
+    maxGapDelta: 110.0,
   );
 
   static const DifficultyConfig _tier3 = DifficultyConfig(
     level: 3,
     levelTitle: 'SEVİYE 3 🔥',
-    pipeSpeed: 150.0,
+    pipeSpeed: 184.0,
     pipeGap: 162.0,
-    pipeSpacing: 305.0,
-    maxGapDelta: 165.0,
+    pipeSpacing: 186.0,
+    maxGapDelta: 125.0,
   );
 
   static const DifficultyConfig _tier4 = DifficultyConfig(
     level: 4,
     levelTitle: 'USTA 🏆',
-    pipeSpeed: 162.0,
+    pipeSpeed: 196.0,
     pipeGap: 152.0,
-    pipeSpacing: 280.0,
-    maxGapDelta: 185.0,
+    pipeSpacing: 175.0,
+    maxGapDelta: 138.0,
   );
 
   static DifficultyConfig getDifficulty(int score) {
@@ -83,9 +83,9 @@ class GameConstants {
   }
 
   // Test ve varsayılan referans sabitleri
-  static const double pipeSpeed = 125.0;
-  static const double pipeGap = 190.0;
-  static const double pipeSpacing = 360.0;
+  static const double pipeSpeed = 160.0;
+  static const double pipeGap = 186.0;
+  static const double pipeSpacing = 210.0;
 
   // Kuş Boyutları
   static const double birdWidth = 42.0;

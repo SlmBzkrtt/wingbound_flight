@@ -506,7 +506,6 @@ class _WingBoundGameState extends State<WingBoundGame>
       case GameState.ready:
         _idleTime += dt;
         _bird.idleBob(_idleTime, gameHeight * 0.42);
-        _groundOffset = (_groundOffset + difficulty.pipeSpeed * dt) % 1000;
 
         if (_mode == GameMode.cyberNeon) {
           _particleSystem.addThrusterSparks(_bird.x - 18, _bird.y, const Color(0xFF00F3FF));
@@ -559,9 +558,6 @@ class _WingBoundGameState extends State<WingBoundGame>
             return;
           }
         }
-
-        // Scroll ground
-        _groundOffset = (_groundOffset + difficulty.pipeSpeed * effectiveDt) % 1000;
 
         // Update Enemy Cyber Drones & Check Projectile / Bird Collisions
         if (_mode == GameMode.cyberNeon) {
@@ -755,9 +751,23 @@ class _WingBoundGameState extends State<WingBoundGame>
         // Remove offscreen pipes
         _pipes.removeWhere((p) => p.x + GameConstants.pipeWidth + 20 < 0);
 
-        // Spawn new pipes using dynamic spacing
-        if (_pipes.isEmpty || (gameWidth - _pipes.last.x >= difficulty.pipeSpacing)) {
-          _spawnPipe(gameHeight, gameWidth, difficulty);
+        // Spawn new pipes continuously using exact pipeSpacing
+        if (_pipes.isEmpty) {
+          final firstX = gameWidth * 0.72;
+          _spawnPipe(gameHeight, gameWidth, difficulty, customX: firstX);
+          _spawnPipe(
+            gameHeight,
+            gameWidth,
+            difficulty,
+            customX: firstX + difficulty.pipeSpacing,
+          );
+        } else if ((gameWidth + 10) - _pipes.last.x >= difficulty.pipeSpacing) {
+          _spawnPipe(
+            gameHeight,
+            gameWidth,
+            difficulty,
+            customX: math.max(gameWidth + 10, _pipes.last.x + difficulty.pipeSpacing),
+          );
         }
         break;
 
@@ -1294,7 +1304,12 @@ class _WingBoundGameState extends State<WingBoundGame>
     }
   }
 
-  void _spawnPipe(double gameHeight, double gameWidth, DifficultyConfig difficulty) {
+  void _spawnPipe(
+    double gameHeight,
+    double gameWidth,
+    DifficultyConfig difficulty, {
+    double? customX,
+  }) {
     final playableHeight = gameHeight - GameConstants.groundHeight;
     final gap = difficulty.pipeGap;
     final minGapCenter = GameConstants.minPipeHeight + gap / 2;
@@ -1315,7 +1330,7 @@ class _WingBoundGameState extends State<WingBoundGame>
     final topHeight = targetCenter - gap / 2;
     final bottomHeight = playableHeight - targetCenter - gap / 2;
 
-    final pipeX = gameWidth + 10;
+    final pipeX = customX ?? (gameWidth + 10);
 
     // In Cyber Neon Mode, moving obstacles and shootable laser gates
     double moveSpeed = 0.0;
@@ -1493,7 +1508,7 @@ class _WingBoundGameState extends State<WingBoundGame>
       _orbitGates.clear();
       _cosmicPowerUps.clear();
       _explorer.reset();
-      _nextGateAngle = SpaceExplorer.startAngle - math.pi * 0.90;
+      _nextGateAngle = SpaceExplorer.startAngle - math.pi * 0.65;
       _lastOrbitGapRadius = null;
       _seaBarriers.clear();
       _cannonballs.clear();
@@ -1558,7 +1573,7 @@ class _WingBoundGameState extends State<WingBoundGame>
       _orbitGates.clear();
       _cosmicPowerUps.clear();
       _explorer.reset();
-      _nextGateAngle = SpaceExplorer.startAngle - math.pi * 0.90;
+      _nextGateAngle = SpaceExplorer.startAngle - math.pi * 0.65;
       _lastOrbitGapRadius = null;
       _seaBarriers.clear();
       _cannonballs.clear();
@@ -1811,18 +1826,12 @@ class _WingBoundGameState extends State<WingBoundGame>
                               if (isCyber)
                                 CustomPaint(
                                   size: canvasSize,
-                                  painter: CyberGroundPainter(
-                                    groundOffset: _groundOffset,
-                                    repaint: _repaintTick,
-                                  ),
+                                  painter: const CyberGroundPainter(),
                                 )
                               else
                                 CustomPaint(
                                   size: canvasSize,
-                                  painter: GroundPainter(
-                                    groundOffset: _groundOffset,
-                                    repaint: _repaintTick,
-                                  ),
+                                  painter: const GroundPainter(),
                                 ),
                               CustomPaint(
                                 size: canvasSize,

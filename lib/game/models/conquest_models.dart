@@ -29,40 +29,40 @@ class ConquestDifficulty {
       return const ConquestDifficulty(
         stage: 1,
         stageTitle: 'KARADAN HALİÇ\'E İNİŞ',
-        scrollSpeed: 138.0,
+        scrollSpeed: 155.0,
         gapWidth: 150.0,
-        barrierSpacing: 325.0,
-        maxGapDelta: 95.0,
+        barrierSpacing: 255.0,
+        maxGapDelta: 90.0,
       );
     } else if (score < 18) {
       final p = (score - 7) / 11.0;
       return ConquestDifficulty(
         stage: 2,
         stageTitle: 'HALİÇ SULARINDA HÜCUM',
-        scrollSpeed: 142.0 + p * 24.0,
+        scrollSpeed: 160.0 + p * 22.0,
         gapWidth: 146.0 - p * 14.0,
-        barrierSpacing: 320.0 - p * 20.0,
-        maxGapDelta: 110.0,
+        barrierSpacing: 250.0 - p * 16.0,
+        maxGapDelta: 102.0,
       );
     } else if (score < 34) {
       final p = (score - 18) / 16.0;
       return ConquestDifficulty(
         stage: 3,
         stageTitle: 'ZİNCİR KIRMA HAREKATI',
-        scrollSpeed: 166.0 + p * 22.0,
+        scrollSpeed: 182.0 + p * 20.0,
         gapWidth: 132.0 - p * 12.0,
-        barrierSpacing: 300.0 - p * 15.0,
-        maxGapDelta: 125.0,
+        barrierSpacing: 234.0 - p * 14.0,
+        maxGapDelta: 115.0,
       );
     } else {
       final extra = ((score - 34) / 25.0).clamp(0.0, 1.0);
       return ConquestDifficulty(
         stage: 4,
         stageTitle: 'ALTIN BOYNUZ FETHİ (1453)',
-        scrollSpeed: 188.0 + extra * 18.0,
+        scrollSpeed: 202.0 + extra * 18.0,
         gapWidth: 120.0 - extra * 6.0, // Never narrower than 114px
-        barrierSpacing: 285.0,
-        maxGapDelta: 135.0,
+        barrierSpacing: 220.0,
+        maxGapDelta: 125.0,
       );
     }
   }

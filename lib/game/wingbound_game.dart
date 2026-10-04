@@ -102,7 +102,6 @@ class _WingBoundGameState extends State<WingBoundGame>
   final List<EnemyDrone> _drones = [];
 
   double _groundOffset = 0.0;
-  double _parallaxOffset = 0.0;
   double _idleTime = 0.0;
   double _flashOpacity = 0.0;
   Color _flashColor = Colors.white;
@@ -508,7 +507,6 @@ class _WingBoundGameState extends State<WingBoundGame>
         _idleTime += dt;
         _bird.idleBob(_idleTime, gameHeight * 0.42);
         _groundOffset = (_groundOffset + difficulty.pipeSpeed * dt) % 1000;
-        _parallaxOffset += difficulty.pipeSpeed * 0.35 * dt;
 
         if (_mode == GameMode.cyberNeon) {
           _particleSystem.addThrusterSparks(_bird.x - 18, _bird.y, const Color(0xFF00F3FF));
@@ -562,9 +560,8 @@ class _WingBoundGameState extends State<WingBoundGame>
           }
         }
 
-        // Scroll ground and background
+        // Scroll ground
         _groundOffset = (_groundOffset + difficulty.pipeSpeed * effectiveDt) % 1000;
-        _parallaxOffset += difficulty.pipeSpeed * 0.35 * effectiveDt;
 
         // Update Enemy Cyber Drones & Check Projectile / Bird Collisions
         if (_mode == GameMode.cyberNeon) {
@@ -1778,18 +1775,12 @@ class _WingBoundGameState extends State<WingBoundGame>
                               if (isCyber)
                                 CustomPaint(
                                   size: canvasSize,
-                                  painter: CyberBackgroundPainter(
-                                    parallaxOffset: _parallaxOffset,
-                                    repaint: _repaintTick,
-                                  ),
+                                  painter: const CyberBackgroundPainter(),
                                 )
                               else
                                 CustomPaint(
                                   size: canvasSize,
-                                  painter: BackgroundPainter(
-                                    parallaxOffset: _parallaxOffset,
-                                    repaint: _repaintTick,
-                                  ),
+                                  painter: const BackgroundPainter(),
                                 ),
                               if (isCyber)
                                 CustomPaint(

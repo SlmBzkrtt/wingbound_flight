@@ -1,9 +1,8 @@
-import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../game_constants.dart';
 
 class BackgroundPainter extends CustomPainter {
-  final double parallaxOffset;
 
   // Sınıf seviyesinde önbellekli Paint nesneleri (60/120 FPS sıfır-allocation)
   static final Paint _skyPaint = Paint();
@@ -96,10 +95,7 @@ class BackgroundPainter extends CustomPainter {
 
   static const double _patternWidth = 386.0;
 
-  const BackgroundPainter({
-    this.parallaxOffset = 0.0,
-    super.repaint,
-  });
+  const BackgroundPainter({super.repaint});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -145,7 +141,7 @@ class BackgroundPainter extends CustomPainter {
 
   void _drawMountains(Canvas canvas, Size size, double groundY) {
     const mountainSpan = 260.0;
-    final farStartX = -(parallaxOffset * 0.12) % mountainSpan - mountainSpan;
+    const farStartX = -mountainSpan;
 
     final farPath = Path();
     for (double x = farStartX; x < size.width + mountainSpan; x += mountainSpan) {
@@ -168,7 +164,7 @@ class BackgroundPainter extends CustomPainter {
       canvas.drawPath(snowPath, _snowCapPaint);
     }
 
-    final midStartX = -(parallaxOffset * 0.20) % mountainSpan - mountainSpan;
+    const midStartX = -mountainSpan;
     final midPath = Path();
     for (double x = midStartX; x < size.width + mountainSpan; x += mountainSpan) {
       midPath
@@ -186,7 +182,7 @@ class BackgroundPainter extends CustomPainter {
     // Üst yüksek irtifa bulutları
     final highCloudY = groundY * 0.26;
     const highSpacing = 210.0;
-    final highStartX = -(parallaxOffset * 0.15) % highSpacing - highSpacing;
+    const highStartX = -highSpacing;
 
     for (double x = highStartX; x < size.width + highSpacing; x += highSpacing) {
       _drawSingleFluffyCloud(canvas, x, highCloudY, 0.78);
@@ -195,7 +191,7 @@ class BackgroundPainter extends CustomPainter {
     // Alçak ufuk bulutları
     final lowCloudY = groundY - 155;
     const cloudSpacing = 165.0;
-    final startX = -(parallaxOffset * 0.25) % cloudSpacing - cloudSpacing;
+    const startX = -cloudSpacing;
 
     for (double x = startX; x < size.width + cloudSpacing; x += cloudSpacing) {
       _drawSingleFluffyCloud(canvas, x, lowCloudY, 1.0);
@@ -237,7 +233,7 @@ class BackgroundPainter extends CustomPainter {
   }
 
   void _drawCitySkyline(Canvas canvas, Size size, double groundY) {
-    final startX = -(parallaxOffset * 0.4) % _patternWidth - _patternWidth;
+    const startX = -_patternWidth;
 
     for (double shift = startX;
         shift < size.width + _patternWidth;
@@ -287,7 +283,7 @@ class BackgroundPainter extends CustomPainter {
   void _drawHillsAndBushes(Canvas canvas, Size size, double groundY) {
     // Yumuşak yeşil tepeler
     const hillSpan = 180.0;
-    final hillStart = -(parallaxOffset * 0.55) % hillSpan - hillSpan;
+    const hillStart = -hillSpan;
     for (double x = hillStart; x < size.width + hillSpan; x += hillSpan) {
       canvas.drawOval(
         Rect.fromCenter(
@@ -301,7 +297,7 @@ class BackgroundPainter extends CustomPainter {
 
     // Ön plan detaylı çalılar
     const bushSpacing = 80.0;
-    final startX = -(parallaxOffset * 0.72) % bushSpacing - bushSpacing;
+    const startX = -bushSpacing;
 
     for (double x = startX; x < size.width + bushSpacing; x += bushSpacing) {
       canvas.drawCircle(Offset(x + 20, groundY - 14), 22, _bushBackPaint);
@@ -312,9 +308,9 @@ class BackgroundPainter extends CustomPainter {
       canvas.drawCircle(Offset(x + 55, groundY - 10), 20, _bushOutlinePaint);
     }
 
-    // Ufukta süzülen küçük kuş silüetleri
-    final birdX = (size.width - (parallaxOffset * 0.35) % (size.width + 120)) - 40;
-    final birdY = groundY * 0.28 + math.sin(parallaxOffset * 0.03) * 8.0;
+    // Ufukta süzülen küçük kuş silüetleri (sabit konum)
+    const birdX = 60.0;
+    final birdY = groundY * 0.28;
     final flockPaint = Paint()
       ..color = const Color(0x88263238)
       ..style = PaintingStyle.stroke
@@ -332,7 +328,5 @@ class BackgroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant BackgroundPainter oldDelegate) {
-    return (oldDelegate.parallaxOffset - parallaxOffset).abs() > 0.05;
-  }
+  bool shouldRepaint(covariant BackgroundPainter oldDelegate) => false;
 }

@@ -8,14 +8,12 @@ import '../models/power_up.dart';
 
 // 1. Synthwave Cyberpunk Background
 class CyberBackgroundPainter extends CustomPainter {
-  final double parallaxOffset;
   final bool warpSpeedActive;
 
   static final Paint _skyPaint = Paint();
   static Size? _cachedSkySize;
 
   const CyberBackgroundPainter({
-    required this.parallaxOffset,
     this.warpSpeedActive = false,
     super.repaint,
   });
@@ -99,7 +97,7 @@ class CyberBackgroundPainter extends CustomPainter {
 
     // Distant Synthwave Neon Wireframe Mountains
     const mSpan = 220.0;
-    final mStart = -(parallaxOffset * 0.16) % mSpan - mSpan;
+    const mStart = -mSpan;
     final mFill = Paint()..color = const Color(0xFF160B30);
     final mStroke = Paint()
       ..color = const Color(0x99B388FF)
@@ -117,7 +115,7 @@ class CyberBackgroundPainter extends CustomPainter {
       canvas.drawPath(mPath, mStroke);
     }
 
-    // Flying Cyber Traffic Light Streaks in the Sky
+    // Flying Cyber Traffic Light Streaks in the Sky (static positions)
     final trafficPaintCyan = Paint()
       ..color = const Color(0xCC00F3FF)
       ..strokeWidth = 2.0
@@ -127,7 +125,7 @@ class CyberBackgroundPainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..strokeCap = StrokeCap.round;
     for (int t = 0; t < 4; t++) {
-      final tx = (size.width - ((parallaxOffset * (0.6 + t * 0.15) + t * 130) % (size.width + 80))) + 20;
+      final tx = size.width * 0.15 + t * (size.width * 0.22);
       final ty = groundY - 155 - t * 34.0;
       canvas.drawLine(
         Offset(tx, ty),
@@ -164,7 +162,7 @@ class CyberBackgroundPainter extends CustomPainter {
       patternWidth += b[0] + 8;
     }
 
-    final startX = -(parallaxOffset * 0.35) % patternWidth - patternWidth;
+    final startX = -patternWidth;
 
     for (double shift = startX; shift < size.width + patternWidth; shift += patternWidth) {
       double currentX = shift;
@@ -208,8 +206,7 @@ class CyberBackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CyberBackgroundPainter oldDelegate) {
-    return oldDelegate.parallaxOffset != parallaxOffset ||
-        oldDelegate.warpSpeedActive != warpSpeedActive;
+    return oldDelegate.warpSpeedActive != warpSpeedActive;
   }
 }
 

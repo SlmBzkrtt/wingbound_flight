@@ -14,6 +14,7 @@ class ConquestWorldPainter extends CustomPainter {
   final bool isInvulnerable;
   final bool hasSahiBuff;
   final double sahiWaveRadius;
+  final int skinIndex;
 
   const ConquestWorldPainter({
     required this.galley,
@@ -27,6 +28,7 @@ class ConquestWorldPainter extends CustomPainter {
     this.isInvulnerable = false,
     this.hasSahiBuff = false,
     this.sahiWaveRadius = 0.0,
+    this.skinIndex = 0,
     super.repaint,
   });
 
@@ -573,13 +575,22 @@ class ConquestWorldPainter extends CustomPainter {
       ..quadraticBezierTo(-19, -15, 0, -35) // Port curve
       ..close();
 
+    final sailPrimaryColor = skinIndex == 1
+        ? const Color(0xFF00695C)
+        : skinIndex == 2
+            ? const Color(0xFF1565C0)
+            : const Color(0xFFC62828);
+    final hullWoodColor = skinIndex == 2
+        ? const Color(0xFF37474F)
+        : const Color(0xFF5D4037);
+
     // Hull shadow
     canvas.drawPath(
       hullPath.shift(const Offset(0, 4)),
       Paint()..color = Colors.black.withValues(alpha: 0.45),
     );
     // Rich oak hull fill
-    canvas.drawPath(hullPath, Paint()..color = const Color(0xFF5D4037));
+    canvas.drawPath(hullPath, Paint()..color = hullWoodColor);
     // Golden-bronze gunwale border
     canvas.drawPath(
       hullPath,
@@ -613,14 +624,14 @@ class ConquestWorldPainter extends CustomPainter {
         ..strokeWidth = 1.5,
     );
 
-    // 6. Billowing Crimson Ottoman Sail (Al Sancak Yelkeni ve Hilal)
+    // 6. Billowing Ottoman Sail (Sancak Yelkeni ve Hilal)
     final sailPath = Path()
       ..moveTo(-20, -4)
       ..quadraticBezierTo(0, -16, 20, -4)
       ..lineTo(17, 8)
       ..quadraticBezierTo(0, -2, -17, 8)
       ..close();
-    canvas.drawPath(sailPath, Paint()..color = const Color(0xFFC62828));
+    canvas.drawPath(sailPath, Paint()..color = sailPrimaryColor);
     canvas.drawPath(
       sailPath,
       Paint()
@@ -629,9 +640,9 @@ class ConquestWorldPainter extends CustomPainter {
         ..strokeWidth = 2.0,
     );
 
-    // Golden Crescent on the Crimson Sail
+    // Golden Crescent on the Sail
     canvas.drawCircle(const Offset(0, -5), 5.0, Paint()..color = const Color(0xFFFFD700));
-    canvas.drawCircle(const Offset(1.8, -6.0), 4.0, Paint()..color = const Color(0xFFC62828));
+    canvas.drawCircle(const Offset(1.8, -6.0), 4.0, Paint()..color = sailPrimaryColor);
 
     // Mast & Waving Pennant
     canvas.drawCircle(const Offset(0, 2), 4.0, Paint()..color = const Color(0xFF3E2723));

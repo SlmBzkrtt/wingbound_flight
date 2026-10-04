@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/game_mode.dart';
+import '../models/skin_model.dart';
+import '../services/game_services.dart';
 
 class ModeSelectScreen extends StatefulWidget {
   final int classicHighScore;
@@ -320,6 +322,75 @@ class _ModeSelectScreenState extends State<ModeSelectScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 10),
+            // Kostüm / Filo Hangarı Seçici Çubuğu
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: RealmSkinCatalog.forMode(mode).map((skin) {
+                final selectedIdx =
+                    GameStorageService.instance.getSelectedSkin(mode);
+                final isSelected = selectedIdx == skin.index;
+                return GestureDetector(
+                  onTap: () {
+                    GameAudioService.instance.playJump();
+                    setState(() {
+                      GameStorageService.instance
+                          .saveSelectedSkin(mode, skin.index);
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 160),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? skin.primaryColor.withValues(alpha: 0.25)
+                          : Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isSelected
+                            ? skin.primaryColor
+                            : Colors.white.withValues(alpha: 0.18),
+                        width: isSelected ? 1.8 : 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 9,
+                          height: 9,
+                          decoration: BoxDecoration(
+                            color: skin.primaryColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: skin.secondaryColor,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          skin.name,
+                          style: TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 12),
             Row(

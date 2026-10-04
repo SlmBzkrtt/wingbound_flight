@@ -18,6 +18,7 @@ import 'painters/conquest_painters.dart';
 import 'painters/cyber_painters.dart';
 import 'painters/ground_painter.dart';
 import 'painters/pipe_painter.dart';
+import 'painters/shader_fx_painter.dart';
 import 'painters/space_painters.dart';
 import 'services/game_services.dart';
 import 'widgets/game_over_dialog.dart';
@@ -154,6 +155,8 @@ class _WingBoundGameState extends State<WingBoundGame>
 
   Future<void> _loadHighScores() async {
     await GameStorageService.instance.init();
+    await GameAudioService.instance.init();
+    await RealmShaderService.instance.init();
     if (!mounted) return;
     setState(() {
       _classicHighScore = GameStorageService.instance.getHighScore(GameMode.classic);
@@ -1738,6 +1741,7 @@ class _WingBoundGameState extends State<WingBoundGame>
                                   isInvulnerable: _invulnerableTimer > 0,
                                   hasSahiBuff: _blasterTimer > 0,
                                   sahiWaveRadius: _empRadius,
+                                  skinIndex: GameStorageService.instance.getSelectedSkin(_mode),
                                   repaint: _repaintTick,
                                 ),
                               ),
@@ -1759,6 +1763,7 @@ class _WingBoundGameState extends State<WingBoundGame>
                                   hasPlasmaShield: _hasShield,
                                   isInvulnerable: _invulnerableTimer > 0,
                                   novaWaveRadius: _empRadius,
+                                  skinIndex: GameStorageService.instance.getSelectedSkin(_mode),
                                   repaint: _repaintTick,
                                 ),
                               ),
@@ -1845,6 +1850,7 @@ class _WingBoundGameState extends State<WingBoundGame>
                                     empRadius: _empRadius,
                                     projectiles: _projectiles,
                                     drones: _drones,
+                                    skinIndex: GameStorageService.instance.getSelectedSkin(_mode),
                                     repaint: _repaintTick,
                                   ),
                                 )
@@ -1853,10 +1859,23 @@ class _WingBoundGameState extends State<WingBoundGame>
                                   size: canvasSize,
                                   painter: BirdPainter(
                                     bird: _bird,
+                                    skinIndex: GameStorageService.instance.getSelectedSkin(_mode),
                                     repaint: _repaintTick,
                                   ),
                                 ),
                             ],
+                            // Gerçek Zamanlı GLSL Fragment Shader Atmosfer Katmanı (Impeller GPU)
+                            IgnorePointer(
+                              child: CustomPaint(
+                                size: canvasSize,
+                                painter: RealmShaderOverlayPainter(
+                                  mode: _mode,
+                                  gameTime: _gameTime,
+                                  intensity: (_empRadius > 0 || _slowMoTimer > 0) ? 1.0 : 0.0,
+                                  repaint: _repaintTick,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),

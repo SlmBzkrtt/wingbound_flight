@@ -220,6 +220,7 @@ class CyberBirdPainter extends CustomPainter {
   final double empRadius;
   final List<LaserBolt> projectiles;
   final List<EnemyDrone> drones;
+  final int skinIndex;
 
   const CyberBirdPainter({
     required this.bird,
@@ -229,11 +230,23 @@ class CyberBirdPainter extends CustomPainter {
     this.empRadius = 0.0,
     this.projectiles = const [],
     this.drones = const [],
+    this.skinIndex = 0,
     super.repaint,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    final primaryNeon = skinIndex == 1
+        ? const Color(0xFF00E676)
+        : skinIndex == 2
+            ? const Color(0xFFFFD54F)
+            : const Color(0xFF00F3FF);
+    final secondaryNeon = skinIndex == 1
+        ? const Color(0xFFB388FF)
+        : skinIndex == 2
+            ? const Color(0xFFFF3D00)
+            : const Color(0xFFFF007F);
+
     // Draw Enemy Cyber Drones
     for (final drone in drones) {
       if (drone.destroyed) continue;
@@ -243,7 +256,7 @@ class CyberBirdPainter extends CustomPainter {
     // Draw Projectiles (Standard Cyan Plasma vs Heavy Pink Blaster)
     for (final bolt in projectiles) {
       final p = Offset(bolt.x, bolt.y);
-      final color = bolt.isHeavy ? const Color(0xFFFF007F) : const Color(0xFF00F3FF);
+      final color = bolt.isHeavy ? secondaryNeon : primaryNeon;
       final glowPaint = Paint()
         ..color = color.withValues(alpha: 0.6)
         ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 5.0);
@@ -268,7 +281,7 @@ class CyberBirdPainter extends CustomPainter {
     // 0. Draw EMP Shockwave if expanding
     if (empRadius > 0.0) {
       final shockwavePaint = Paint()
-        ..color = const Color(0xFF00F3FF).withValues(alpha: (1.0 - (empRadius / 380.0)).clamp(0.0, 1.0))
+        ..color = primaryNeon.withValues(alpha: (1.0 - (empRadius / 380.0)).clamp(0.0, 1.0))
         ..style = PaintingStyle.stroke
         ..strokeWidth = 5.0
         ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 8.0);
@@ -280,7 +293,7 @@ class CyberBirdPainter extends CustomPainter {
       for (int i = 0; i < trailPositions.length - 1; i++) {
         final progress = i / trailPositions.length; // 0 to 1
         final trailPaint = Paint()
-          ..color = const Color(0xFF00F3FF).withValues(alpha: progress * 0.65)
+          ..color = primaryNeon.withValues(alpha: progress * 0.65)
           ..strokeWidth = progress * 4.0 + 1.2
           ..strokeCap = StrokeCap.round;
         canvas.drawLine(trailPositions[i], trailPositions[i + 1], trailPaint);
@@ -294,7 +307,7 @@ class CyberBirdPainter extends CustomPainter {
     // Invulnerability flashing aura
     if (isInvulnerable) {
       final invulnPaint = Paint()
-        ..color = const Color(0xFF00F3FF).withValues(alpha: 0.45)
+        ..color = primaryNeon.withValues(alpha: 0.45)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.5
         ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 4.0);
@@ -304,13 +317,13 @@ class CyberBirdPainter extends CustomPainter {
     // Active Hex Shield if present
     if (hasShield) {
       final shieldGlowPaint = Paint()
-        ..color = const Color(0xFF00F3FF).withValues(alpha: 0.45)
+        ..color = primaryNeon.withValues(alpha: 0.45)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3.5
         ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 5.0);
 
       final shieldFillPaint = Paint()
-        ..color = const Color(0xFF00F3FF).withValues(alpha: 0.18)
+        ..color = primaryNeon.withValues(alpha: 0.18)
         ..style = PaintingStyle.fill;
 
       canvas.drawCircle(Offset.zero, 25, shieldFillPaint);
@@ -329,10 +342,10 @@ class CyberBirdPainter extends CustomPainter {
       ..lineTo(-26, 0)
       ..lineTo(-16, 4)
       ..close();
-    final thrusterPaint = Paint()..color = const Color(0xFFFF007F);
+    final thrusterPaint = Paint()..color = secondaryNeon;
     canvas.drawPath(thrusterPath, thrusterPaint);
 
-    final innerFlamePaint = Paint()..color = const Color(0xFF00F3FF);
+    final innerFlamePaint = Paint()..color = primaryNeon;
     final innerFlame = Path()
       ..moveTo(-16, -2)
       ..lineTo(-22, 0)
@@ -343,7 +356,7 @@ class CyberBirdPainter extends CustomPainter {
     // Titanium Metallic Body
     final bodyPaint = Paint()..color = const Color(0xFF1E2430);
     final borderPaint = Paint()
-      ..color = const Color(0xFF00F3FF)
+      ..color = primaryNeon
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.2;
 
@@ -353,7 +366,7 @@ class CyberBirdPainter extends CustomPainter {
     canvas.drawRRect(bodyRRect, borderPaint);
 
     // Cybernetic Wing
-    final wingPaint = Paint()..color = const Color(0xFFFF007F);
+    final wingPaint = Paint()..color = secondaryNeon;
     final wingPath = Path();
     if (bird.wingFrame == 1) {
       wingPath

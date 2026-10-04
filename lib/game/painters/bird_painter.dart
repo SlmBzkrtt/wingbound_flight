@@ -98,13 +98,36 @@ class BirdPainter extends CustomPainter {
     ..lineTo(7, 8)
     ..close();
 
+  final int skinIndex;
+
   const BirdPainter({
     required this.bird,
+    this.skinIndex = 0,
     super.repaint,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    final bodyColor = skinIndex == 1
+        ? const Color(0xFF00C853)
+        : skinIndex == 2
+            ? const Color(0xFFE53935)
+            : GameConstants.birdBodyColor;
+    final bellyColor = skinIndex == 1
+        ? const Color(0xFF69F0AE)
+        : skinIndex == 2
+            ? const Color(0xFFFF8A80)
+            : GameConstants.birdBellyColor;
+    final wingColor = skinIndex == 1
+        ? const Color(0xFFFFD54F)
+        : skinIndex == 2
+            ? const Color(0xFFFFF8E1)
+            : GameConstants.birdWingColor;
+
+    _bodyPaint.color = bodyColor;
+    _bellyPaint.color = bellyColor;
+    _wingPaint.color = wingColor;
+
     canvas.save();
     canvas.translate(bird.x, bird.y);
     canvas.rotate(bird.rotation);
@@ -149,6 +172,7 @@ class BirdPainter extends CustomPainter {
   bool shouldRepaint(covariant BirdPainter oldDelegate) {
     return oldDelegate.bird.y != bird.y ||
         oldDelegate.bird.rotation != bird.rotation ||
-        oldDelegate.bird.wingFrame != bird.wingFrame;
+        oldDelegate.bird.wingFrame != bird.wingFrame ||
+        oldDelegate.skinIndex != skinIndex;
   }
 }

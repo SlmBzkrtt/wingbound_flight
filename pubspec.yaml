@@ -43,3 +43,5 @@ flutter_native_splash:
 
 flutter:
   uses-material-design: true
+  shaders:
+    - shaders/realm_fx.frag

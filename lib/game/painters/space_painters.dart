@@ -10,6 +10,7 @@ class SpaceOrbitWorldPainter extends CustomPainter {
   final bool hasPlasmaShield;
   final bool isInvulnerable;
   final double novaWaveRadius;
+  final int skinIndex;
 
   const SpaceOrbitWorldPainter({
     required this.explorer,
@@ -19,6 +20,7 @@ class SpaceOrbitWorldPainter extends CustomPainter {
     this.hasPlasmaShield = false,
     this.isInvulnerable = false,
     this.novaWaveRadius = 0.0,
+    this.skinIndex = 0,
     super.repaint,
   });
 
@@ -722,6 +724,17 @@ class SpaceOrbitWorldPainter extends CustomPainter {
     canvas.drawRRect(torsoRect, suitWhite);
     canvas.drawRRect(torsoRect, suitBorder);
 
+    final skinCoreColor = skinIndex == 1
+        ? const Color(0xFFE040FB)
+        : skinIndex == 2
+            ? const Color(0xFFFF9100)
+            : const Color(0xFF00E5FF);
+    final skinStripeColor = skinIndex == 1
+        ? const Color(0xFFFFD54F)
+        : skinIndex == 2
+            ? const Color(0xFF00E5FF)
+            : const Color(0xFFFF6D00);
+
     // Sci-Fi Chest Telemetry & Oxygen Core Module
     final chestPanel = RRect.fromRectAndRadius(
       Rect.fromCenter(center: const Offset(2, -4), width: 12, height: 9),
@@ -731,15 +744,15 @@ class SpaceOrbitWorldPainter extends CustomPainter {
     canvas.drawCircle(
       const Offset(2, -4),
       2.8,
-      Paint()..color = const Color(0xFF00E5FF),
+      Paint()..color = skinCoreColor,
     );
 
-    // Orange & Cosmic Violet Mission Stripes on Suit
+    // Mission Stripes on Suit
     canvas.drawLine(
       const Offset(-9, 3),
       const Offset(9, 3),
       Paint()
-        ..color = const Color(0xFFFF6D00)
+        ..color = skinStripeColor
         ..strokeWidth = 2.8,
     );
 

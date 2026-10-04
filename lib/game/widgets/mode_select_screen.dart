@@ -334,7 +334,7 @@ class _ModeSelectScreenState extends State<ModeSelectScreen> {
                 final isSelected = selectedIdx == skin.index;
                 return GestureDetector(
                   onTap: () {
-                    GameAudioService.instance.playJump();
+                    GameAudioService.instance.playJump(mode);
                     setState(() {
                       GameStorageService.instance
                           .saveSelectedSkin(mode, skin.index);

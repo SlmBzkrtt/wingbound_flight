@@ -156,6 +156,52 @@ class SpaceOrbitWorldPainter extends CustomPainter {
         ..strokeWidth = 2.6,
     );
     canvas.restore();
+
+    // Distant Spiral Galaxy in top-left quadrant
+    final galaxyCenter = Offset(64, size.height * 0.16);
+    canvas.save();
+    canvas.translate(galaxyCenter.dx, galaxyCenter.dy);
+    canvas.rotate(gameTime * 0.15);
+    canvas.drawCircle(
+      Offset.zero,
+      14,
+      Paint()
+        ..color = const Color(0x55EA80FC)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10.0),
+    );
+    canvas.drawCircle(Offset.zero, 3.5, Paint()..color = const Color(0xFFFFF8E1));
+    final armPaint = Paint()
+      ..color = const Color(0x7780D8FF)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round;
+    for (int arm = 0; arm < 2; arm++) {
+      final path = Path();
+      final baseA = arm * math.pi;
+      for (int s = 0; s < 14; s++) {
+        final t = s / 13.0;
+        final r = 3.0 + t * 18.0;
+        final a = baseA + t * 3.4;
+        final pt = Offset(r * math.cos(a), r * 0.65 * math.sin(a));
+        if (s == 0) {
+          path.moveTo(pt.dx, pt.dy);
+        } else {
+          path.lineTo(pt.dx, pt.dy);
+        }
+      }
+      canvas.drawPath(path, armPaint);
+    }
+    canvas.restore();
+
+    // Orbiting Micro-Asteroid & Starlight Dust Belt around the Black Hole
+    final dustPaint = Paint()..color = const Color(0x88B388FF);
+    for (int d = 0; d < 28; d++) {
+      final da = (d * 2 * math.pi / 28) - gameTime * (0.28 + (d % 3) * 0.08);
+      final dr = 84.0 + (d * 29.0) % 150.0;
+      final dx = center.dx + dr * math.cos(da);
+      final dy = center.dy + dr * math.sin(da);
+      canvas.drawCircle(Offset(dx, dy), (d % 3 == 0) ? 1.8 : 1.1, dustPaint);
+    }
   }
 
   void _drawGravitationalOrbitField(Canvas canvas, Offset center) {

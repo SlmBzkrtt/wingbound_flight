@@ -513,6 +513,20 @@ class ConquestWorldPainter extends CustomPainter {
     canvas.translate(galley.x, galley.y);
     canvas.rotate(galley.bankAngle);
 
+    // 0. Foaming V-Shaped Water Wake & Stern Trail (Köpüklü Dümen Suyu)
+    final wakeWave = math.sin(gameTime * 10.0) * 2.5;
+    final wakePaint = Paint()
+      ..color = const Color(0x66B3E5FC)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.4
+      ..strokeCap = StrokeCap.round;
+    final wakePath = Path()
+      ..moveTo(0, -34)
+      ..quadraticBezierTo(-22, -4, -26 - wakeWave, 46)
+      ..moveTo(0, -34)
+      ..quadraticBezierTo(22, -4, 26 + wakeWave, 46);
+    canvas.drawPath(wakePath, wakePaint);
+
     // 1. Invulnerability or Armor Shield Aura
     if (isInvulnerable) {
       canvas.drawOval(

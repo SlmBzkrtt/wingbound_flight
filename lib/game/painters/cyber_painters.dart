@@ -61,9 +61,9 @@ class CyberBackgroundPainter extends CustomPainter {
       }
     }
 
-    // Giant Synthwave Retro Sun
-    final sunCenter = Offset(size.width * 0.5, groundY - 45);
-    const sunRadius = 56.0;
+    // Giant Synthwave Retro Sun with Neon Corona Halo
+    final sunCenter = Offset(size.width * 0.5, groundY - 52);
+    const sunRadius = 62.0;
     final sunRect = Rect.fromCircle(center: sunCenter, radius: sunRadius);
 
     final sunGradient = const LinearGradient(
@@ -71,12 +71,20 @@ class CyberBackgroundPainter extends CustomPainter {
       end: Alignment.bottomCenter,
       colors: [
         Color(0xFFFFEE55),
+        Color(0xFFFF6D00),
         Color(0xFFFF007F),
       ],
     );
 
     canvas.save();
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, groundY));
+    canvas.drawCircle(
+      sunCenter,
+      sunRadius + 22,
+      Paint()
+        ..color = const Color(0x55FF007F)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 24.0),
+    );
     canvas.drawCircle(sunCenter, sunRadius, Paint()..shader = sunGradient.createShader(sunRect));
 
     // Retro scanline stripes cutting through the bottom half of the sun
@@ -88,26 +96,66 @@ class CyberBackgroundPainter extends CustomPainter {
         cutPaint,
       );
     }
+
+    // Distant Synthwave Neon Wireframe Mountains
+    const mSpan = 220.0;
+    final mStart = -(parallaxOffset * 0.16) % mSpan - mSpan;
+    final mFill = Paint()..color = const Color(0xFF160B30);
+    final mStroke = Paint()
+      ..color = const Color(0x99B388FF)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6;
+    for (double mx = mStart; mx < size.width + mSpan; mx += mSpan) {
+      final mPath = Path()
+        ..moveTo(mx, groundY)
+        ..lineTo(mx + 80, groundY - 175)
+        ..lineTo(mx + 145, groundY - 115)
+        ..lineTo(mx + 195, groundY - 185)
+        ..lineTo(mx + mSpan + 20, groundY)
+        ..close();
+      canvas.drawPath(mPath, mFill);
+      canvas.drawPath(mPath, mStroke);
+    }
+
+    // Flying Cyber Traffic Light Streaks in the Sky
+    final trafficPaintCyan = Paint()
+      ..color = const Color(0xCC00F3FF)
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round;
+    final trafficPaintPink = Paint()
+      ..color = const Color(0xCCFF007F)
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round;
+    for (int t = 0; t < 4; t++) {
+      final tx = (size.width - ((parallaxOffset * (0.6 + t * 0.15) + t * 130) % (size.width + 80))) + 20;
+      final ty = groundY - 155 - t * 34.0;
+      canvas.drawLine(
+        Offset(tx, ty),
+        Offset(tx + 22, ty),
+        t.isEven ? trafficPaintCyan : trafficPaintPink,
+      );
+    }
     canvas.restore();
 
-    // Cyber Skyscrapers with glowing cyan/pink windows
+    // Cyber Skyscrapers with glowing cyan/pink windows & rooftop spires
     _drawCyberCity(canvas, size, groundY);
   }
 
   void _drawCyberCity(Canvas canvas, Size size, double groundY) {
     final buildingPaint = Paint()..color = const Color(0xFF120E2E);
     final neonLinePaint = Paint()
-      ..color = const Color(0xFF00F3FF).withValues(alpha: 0.6)
-      ..strokeWidth = 1.5;
-    final windowPaint = Paint()..color = const Color(0xFFFF007F).withValues(alpha: 0.7);
+      ..color = const Color(0xFF00F3FF).withValues(alpha: 0.75)
+      ..strokeWidth = 1.8;
+    final windowPaint = Paint()..color = const Color(0xFFFF007F).withValues(alpha: 0.75);
+    final cyanWindowPaint = Paint()..color = const Color(0xFF00F3FF).withValues(alpha: 0.70);
 
     const buildings = [
       [42.0, 90.0],
-      [56.0, 130.0],
+      [56.0, 134.0],
       [36.0, 75.0],
-      [64.0, 150.0],
-      [48.0, 110.0],
-      [52.0, 125.0],
+      [64.0, 154.0],
+      [48.0, 112.0],
+      [52.0, 128.0],
       [38.0, 85.0],
     ];
 
@@ -120,7 +168,8 @@ class CyberBackgroundPainter extends CustomPainter {
 
     for (double shift = startX; shift < size.width + patternWidth; shift += patternWidth) {
       double currentX = shift;
-      for (final b in buildings) {
+      for (int i = 0; i < buildings.length; i++) {
+        final b = buildings[i];
         final w = b[0];
         final h = b[1];
         final top = groundY - h;
@@ -134,9 +183,21 @@ class CyberBackgroundPainter extends CustomPainter {
           neonLinePaint,
         );
 
+        // Cyber antenna spire on tall towers
+        if (i.isOdd) {
+          final cx = currentX + w * 0.5;
+          canvas.drawLine(Offset(cx, top), Offset(cx, top - 16), neonLinePaint);
+          canvas.drawCircle(Offset(cx, top - 17), 2.5, windowPaint);
+        }
+
+        int wIdx = 0;
         for (double wy = top + 14; wy < groundY - 16; wy += 18) {
           for (double wx = currentX + 8; wx < currentX + w - 8; wx += 12) {
-            canvas.drawRect(Rect.fromLTWH(wx, wy, 4, 7), windowPaint);
+            wIdx++;
+            canvas.drawRect(
+              Rect.fromLTWH(wx, wy, 4, 7),
+              (wIdx + i) % 3 == 0 ? cyanWindowPaint : windowPaint,
+            );
           }
         }
 

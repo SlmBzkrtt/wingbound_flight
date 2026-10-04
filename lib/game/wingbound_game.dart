@@ -301,7 +301,7 @@ class _WingBoundGameState extends State<WingBoundGame>
 
   void _triggerEmpBlast() {
     if (_gameState != GameState.playing) return;
-    GameAudioService.instance.playSpecialAbility();
+    GameAudioService.instance.playSpecialAbility(_mode);
 
     if (_mode == GameMode.conquest1453) {
       _fireCannonballVolley();
@@ -1412,7 +1412,7 @@ class _WingBoundGameState extends State<WingBoundGame>
       case GameState.menu:
         break;
       case GameState.ready:
-        GameAudioService.instance.playJump();
+        GameAudioService.instance.playJump(_mode);
         setState(() {
           _gameState = GameState.playing;
           _jumpsUsed = 1;
@@ -1428,7 +1428,7 @@ class _WingBoundGameState extends State<WingBoundGame>
         });
         break;
       case GameState.playing:
-        GameAudioService.instance.playJump();
+        GameAudioService.instance.playJump(_mode);
         if (_mode == GameMode.spaceOrbit) {
           _explorer.thrustOutward();
         } else if (_mode == GameMode.conquest1453) {
